@@ -38,7 +38,7 @@ A tecnologia envolvida no projeto LifeGuard é apropriada e já é amplamente ut
 
 ## Análise de viabilidade financeira:
 
-A análise financeira do projeto LifeGuard aponta para uma elevada viabilidade financeira, com expectativas de retornos financeiros positivos a partir da venda da caixa com botão e dos serviços de suporte e atualizações, o protótipo do projeto LifeGuard tem dispositivos IOT com orçamento estimado para a implementação do projeto de em média  R$110 reais para teste onde pode ser utilizado outros iot assim deixando o preço menor, os software utilizado no mesmo não tem custo de licença .
+A análise financeira do projeto LifeGuard aponta para uma elevada viabilidade financeira, com expectativas de retornos financeiros positivos a partir da venda da caixa com botão e dos serviços de suporte e atualizações, o protótipo do projeto LifeGuard tem dispositivos IOT com orçamento estimado para a implementação do projeto de em média  R$110 reais para teste onde pode ser utilizado outros iot assim deixando o preço mais acessível, os software utilizado no mesmo não tem custo de licença .
 
 ## Referências e exemplos similares:
 

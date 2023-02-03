@@ -30,7 +30,7 @@ O mercado de segurança pessoal está em constante crescimento, e existe uma dem
 
 ## Plano de negócios:
 
-O plano de negócios para o projeto LifeGuard inclui a produção e comercialização da caixa com botão, bem como a criação e manutenção do aplicativo móvel. Além disso, podemos oferecer  serviços de suporte e atualizações periódicas para garantir a eficiência e segurança do sistema.
+O plano de negócios para o projeto LifeGuard inclui a produção e comercialização da relógios, pulseiras ou colares usando essas tecnologias aplicadas no projeto, bem como a criação e manutenção do aplicativo móvel. Além disso, podemos oferecer  serviços de suporte e atualizações periódicas para garantir a eficiência e segurança do sistema.
 
 ## Análise de viabilidade técnica:
 

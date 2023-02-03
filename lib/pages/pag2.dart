@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+
 import 'package:geolocator/geolocator.dart';
 
 class pag2 extends StatefulWidget {
@@ -12,8 +12,6 @@ class pag2 extends StatefulWidget {
   @override
   State<pag2> createState() => _pag2State();
 }
-
-//List<String> coordenadas = ["0", "0"];
 
 class _pag2State extends State<pag2> {
   bool liga = false;
@@ -32,18 +30,14 @@ class _pag2State extends State<pag2> {
                 height: 500,
                 width: double.infinity,
                 child: GoogleMap(
-                  //onMapCreated: _onMapCreated,
                   initialCameraPosition: CameraPosition(
-                      target: LatLng(-23.4245425, -47.363852), zoom: 14.0),
+                      target: LatLng(-23.4237402, -47.3670707), zoom: 14.0),
                   markers: {
                     Marker(
                       markerId: const MarkerId("Fit"),
-                      position: LatLng(-23.5466700, -47.4377800),
-                      // position: LatLng(double.parse(coordenadas[0]), double.parse(coordenadas[1])),
+                      position: LatLng(-23.4237402, -47.3670707),
                       draggable: true,
-                      onDragEnd: (value) {
-                        // value is the new position
-                      },
+                      onDragEnd: (value) {},
                     ),
                   },
                 ),
@@ -61,7 +55,6 @@ class _pag2State extends State<pag2> {
               liga = value;
               setState(() {
                 conectmqtt();
-                //conectmqtt2();
               });
             }),
           ),
@@ -130,6 +123,9 @@ class _pag2State extends State<pag2> {
     print('Conectando...');
     client.connectionMessage = connMess;
 
+    print('Tentando conectar...');
+    print('Endereço do broker: ${client.server}');
+
     try {
       await client.connect();
     } on NoConnectionException catch (e) {
@@ -177,7 +173,7 @@ class _pag2State extends State<pag2> {
       print(
           'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
     });
-
+    setState(() {});
     const pubTopic = 'Dart/Mqtt_client/testtopic';
     final builder = MqttClientPayloadBuilder();
     builder.addString('Olá!');
@@ -239,124 +235,4 @@ class _pag2State extends State<pag2> {
     print('EXAMPLE::Ping response client callback invoked');
     pongCount++;
   }
-}
-
-//variavel 2 :
-
-final client2 = MqttServerClient('test.mosquitto.org', '');
-
-var pongCount2 = 0; // Pong counter
-String msg_coordenadas = "";
-
-Future<int> conectmqtt2() async {
-  client2.logging(on: true);
-  client2.setProtocolV311();
-  client2.keepAlivePeriod = 20;
-  client2.connectTimeoutPeriod = 2000;
-  client2.onDisconnected = onDisconnected;
-  client2.onConnected = onConnected;
-  // client2.onSubscribed = onSubscribed;
-  //client2.pongCallback = pong;
-
-  final connMess2 = MqttConnectMessage()
-      .withClientIdentifier('Mqtt_MyClientUniqueId')
-      .withWillTopic('willtopic') // If you set this you must set a will message
-      .withWillMessage('My Will message')
-      .startClean() // Non persistent session for testing
-      .withWillQos(MqttQos.atLeastOnce);
-  print('EXAMPLE::Mosquitto client connecting....');
-  client2.connectionMessage = connMess2;
-
-  try {
-    await client2.connect();
-  } on NoConnectionException catch (e) {
-    // Raised by the client when connection fails.
-    print('EXAMPLE::client exception - $e');
-    client2.disconnect();
-  } on SocketException catch (e) {
-    // Raised by the socket layer
-    print('EXAMPLE::socket exception - $e');
-    client2.disconnect();
-  }
-
-  if (client2.connectionStatus!.state == MqttConnectionState.connected) {
-    print('EXAMPLE::Mosquitto client connected');
-  } else {
-    /// Use status here rather than state if you also want the broker return code.
-    print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client2.connectionStatus}');
-    client2.disconnect();
-    exit(-1);
-  }
-
-  print('EXAMPLE::Subscribing to the test/lol topic');
-  const topic2 = 'Coordenadas_Life'; // Not a wildcard topic
-  client2.subscribe(topic2, MqttQos.atMostOnce);
-
-  client2.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
-    final recMess2 = c![0].payload as MqttPublishMessage;
-    final pq =
-        MqttPublishPayload.bytesToStringAsString(recMess2.payload.message);
-    msg_coordenadas = pq;
-
-    print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pq -->');
-    print('');
-  });
-
-  client2.published!.listen((MqttPublishMessage message) {
-    print(
-        'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
-  });
-
-  const pubTopic2 = 'Dart/Mqtt_client/testtopic';
-  final builder2 = MqttClientPayloadBuilder();
-  builder2.addString('Carregando informações...');
-
-  /// Subscribe to it
-  print('EXAMPLE::Subscribing to the Dart/Mqtt_client2/testtopic topic');
-  client2.subscribe(pubTopic2, MqttQos.exactlyOnce);
-
-  /// Publish it
-  print('EXAMPLE::Publishing our topic');
-  client2.publishMessage(pubTopic2, MqttQos.exactlyOnce, builder2.payload!);
-
-  await MqttUtilities.asyncSleep(2);
-  print('EXAMPLE::Disconnecting');
-  client2.disconnect();
-  print('EXAMPLE::Exiting normally');
-  return 0;
-}
-
-/// The subscribed callback
-void onSubscribed(String topic2) {
-  print('EXAMPLE::Subscription confirmed for topic $topic2');
-}
-
-/// The unsolicited disconnect callback
-void onDisconnected() {
-  print('EXAMPLE::OnDisconnected client callback - Client disconnection');
-  if (client2.connectionStatus!.disconnectionOrigin ==
-      MqttDisconnectionOrigin.solicited) {
-    print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
-  } else {
-    print(
-        'EXAMPLE::OnDisconnected callback is unsolicited or none, this is incorrect - exiting');
-    exit(-1);
-  }
-  if (pongCount2 == 3) {
-    print('EXAMPLE:: Pong count is correct');
-  } else {
-    print('EXAMPLE:: Pong count is incorrect, expected 3. actual $pongCount2');
-  }
-}
-
-void onConnected() {
-  print(
-      'EXAMPLE::OnConnected client callback - Client connection was successful');
-}
-
-void pong() {
-  print('EXAMPLE::Ping response client callback invoked');
-  pongCount2++;
 }
